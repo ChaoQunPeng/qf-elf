@@ -3,6 +3,7 @@
 	"displayName": "qf-elf",
 	"description": "",
 	"version": "0.0.1",
+	"publisher": "pcq",
 	"engines": {
 		"vscode": "^1.46.0"
 	},
