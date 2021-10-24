@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { getTableTpl } from './tpl/table';
 import { getFormTpl } from './tpl/form';
+import { getDialogTpl } from './tpl/dialog';
 import path = require('path');
 import fs = require('fs');
 
@@ -26,10 +27,27 @@ export function activate(context: vscode.ExtensionContext) {
 		createFile(uri, getFormTpl);
 	});
 
-	context.subscriptions.push(createTableColumnTemplateDispose);
-	context.subscriptions.push(createTableFileDispose);
-	context.subscriptions.push(createFormItemDispose);
-	context.subscriptions.push(createFormFileDispose);
+	// 生成弹框模板
+	let dialogDispose = vscode.commands.registerCommand('qf-elf.createDialog', (uri) => {
+		createFile(uri, getDialogTpl);
+	});
+
+	const disposes: any[] = [
+		createTableColumnTemplateDispose,
+		createTableFileDispose,
+		createFormItemDispose,
+		createFormFileDispose,
+		dialogDispose
+	];
+
+	disposes.forEach(d => {
+		context.subscriptions.push(d);
+	});
+
+	// context.subscriptions.push(createTableColumnTemplateDispose);
+	// context.subscriptions.push(createTableFileDispose);
+	// context.subscriptions.push(createFormItemDispose);
+	// context.subscriptions.push(createFormFileDispose);
 }
 
 /**
@@ -111,7 +129,7 @@ async function createTableColumnTemplate() {
 				columnTpl += `
 				<el-table-column prop="${key}" label="${json[key]}">
 					<template slot-scope="scope">
-						{{ scope.row.${key} }}
+						{{ scope.row.${key} | emptyDisplay}}
 					</template>
 				</el-table-column>`;
 			}
@@ -150,7 +168,7 @@ async function createFormItemTemplate() {
 
 			for (const key in json) {
 				columnTpl += `
-				<el-col :span="12">
+				<el-col :span="24">
           <el-form-item prop="${key}">
             <template #label>
               <i class="iconfont icon-account"></i>
@@ -169,6 +187,22 @@ async function createFormItemTemplate() {
 		editor.edit(builder => builder.replace(selection, cols));
 	} catch (error) {
 		vscode.window.showInformationMessage(`选择的不是一个JSON对象，请复制一个JSON对象`);
+	}
+}
+
+/**
+ * 创建弹框
+ */
+async function createDialogTemplate() {
+	let name = await vscode.window.showInputBox({
+		placeHolder: '输入文件名称，请使用kebab命名方式',
+		prompt: '按回车确定'
+	});
+
+	name = name?.replace(/\s+/g, "");
+
+	if (!name) {
+		return;
 	}
 }
 

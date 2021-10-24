@@ -33,6 +33,10 @@
 			{
 				"command": "qf-elf.createFormFile",
 				"title": "QF/生成Form模板文件"
+			},
+			{
+				"command": "qf-elf.createDialog",
+				"title": "QF/生成Dialog模板文件"
 			}
 		],
 		"menus": {
@@ -58,6 +62,11 @@
 					"when": "explorerViewletVisible",
 					"command": "qf-elf.createFormFile",
 					"group": "1_modification@1"
+				},
+				{
+					"when": "explorerViewletVisible",
+					"command": "qf-elf.createDialog",
+					"group": "1_modification@2"
 				}
 			]
 		}

@@ -1,39 +1,16 @@
 import * as vscode from 'vscode';
+import * as tableColumn from './table-column';
 
 async function createColumn() {
   let text = await vscode.env.clipboard.readText();
   const editor = vscode.window.activeTextEditor;
 
+  
   if (!editor) {
     return;
   };
 
-  try {
-    let jsonData = JSON.parse(text);
-
-
-    const createTpl = (json: any) => {
-      let tpl = ``;
-
-      for (const key in json) {
-        tpl += `
-				<el-table-column prop="${key}" label="${json[key]}">
-					<template slot-scope="scope">
-						{{ scope.row.${key} }}
-					</template>
-				</el-table-column>
-        `;
-      }
-
-      return tpl;
-    };
-
-    let cols = createTpl(jsonData);
-
-    return cols;
-  } catch (error) {
-    return '';
-  }
+  return tableColumn.createColumn(text);
 }
 
 
