@@ -19,54 +19,72 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "qf-elf.createTableColumnTemplate",
-				"title": "QF/生成表格列"
+				"command": "qf-elf.createTableList",
+				"title": "QF/生成table文件"
 			},
 			{
-				"command": "qf-elf.createTableFile",
-				"title": "QF/生成table模板文件"
+				"command": "qf-elf.createTableCol",
+				"title": "QF/生成table column代码"
 			},
 			{
-				"command": "qf-elf.createFormItemTemplate",
-				"title": "QF/生成表单控件"
+				"command": "qf-elf.createDialogTable",
+				"title": "QF/生成dialog table文件"
 			},
 			{
-				"command": "qf-elf.createFormFile",
-				"title": "QF/生成Form模板文件"
+				"command": "qf-elf.createFormItem",
+				"title": "QF/生成form item代码"
+			},
+			{
+				"command": "qf-elf.createDialogForm",
+				"title": "QF/生成dialog form文件"
 			},
 			{
 				"command": "qf-elf.createDialog",
-				"title": "QF/生成Dialog模板文件"
+				"title": "QF/生成dialog文件"
+			},
+			{
+				"command": "qf-elf.createQflabel",
+				"title": "QF/生成qf-label代码"
 			}
 		],
 		"menus": {
 			"editor/context": [
 				{
 					"when": "editorFocus",
-					"command": "qf-elf.createTableColumnTemplate",
+					"command": "qf-elf.createTableCol",
 					"group": "1_modification@0"
 				},
 				{
 					"when": "editorFocus",
-					"command": "qf-elf.createFormItemTemplate",
+					"command": "qf-elf.createFormItem",
+					"group": "1_modification@1"
+				},
+				{
+					"when": "editorFocus",
+					"command": "qf-elf.createQflabel",
 					"group": "1_modification@1"
 				}
 			],
 			"explorer/context": [
 				{
 					"when": "explorerViewletVisible",
-					"command": "qf-elf.createTableFile",
+					"command": "qf-elf.createTableList",
 					"group": "1_modification@0"
 				},
 				{
 					"when": "explorerViewletVisible",
-					"command": "qf-elf.createFormFile",
+					"command": "qf-elf.createDialogTable",
 					"group": "1_modification@1"
 				},
 				{
 					"when": "explorerViewletVisible",
-					"command": "qf-elf.createDialog",
+					"command": "qf-elf.createDialogForm",
 					"group": "1_modification@2"
+				},
+				{
+					"when": "explorerViewletVisible",
+					"command": "qf-elf.createDialog",
+					"group": "1_modification@3"
 				}
 			]
 		}

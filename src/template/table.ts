@@ -1,24 +1,13 @@
 import * as vscode from 'vscode';
-import * as tableColumn from './table-column';
+import { createTableColumn } from './utils';
 
-async function createColumn() {
+const getTpl = async (params: { name: string }) => {
   let text = await vscode.env.clipboard.readText();
-  const editor = vscode.window.activeTextEditor;
 
-  
-  if (!editor) {
-    return;
-  };
-
-  return tableColumn.createColumn(text);
-}
-
-
-export const getTableTpl = async (name: string) => {
-  const tableTpl = `<template>
-  <div id="${name}">
-    <el-table class="qf-table" :data="listData" style="width: 100%">
-      ${await createColumn() ?? ''}
+  const tpl = `<template>
+  <div id="${params.name}" v-loading="loading">
+    <el-table class="qf-table" :data="listData.rows" style="width: 100%">
+      ${createTableColumn(text)}
     </el-table>
 
     <div class="text-right mt6" v-if="listData.total != 0">
@@ -29,34 +18,41 @@ export const getTableTpl = async (name: string) => {
         @current-change="paginChange"
         :total="listData.total"
         :page-size="queryParams.page_size"
-      >
-      </el-pagination>
+      ></el-pagination>
     </div>
   </div>
 </template>
 
 <script>
-import debounce from '@utils/debounce';
-
 export default {
-  name: '${name}',
+  name: '${params.name}',
 
   data() {
     return {
       queryParams: {
+        search: '',
         page: 1,
         page_size: 10
       },
-      listData: {}
+      listData: {
+        rows: [],
+        total: 0
+      },
+      loading: false
     };
+  },
+
+  created() {
+    this.getList();
   },
 
   methods: {
     /**
-     * 搜索
+     * 查询
      */
     searchOnInput(value) {
-      debounce(() => {
+      this.$debounce(() => {
+        this.queryParams.page = 1;
         this.queryParams.search = value;
         this.getList();
       }, 300);
@@ -72,15 +68,9 @@ export default {
      * 获取列表
      */
     async getList() {
-      await this.$nextTick();
-      const loading = this.$loading({
-        target: '#${name}',
-        body: false,
-        text: '正在获取数据...'
-      });
+      this.loading = true;
 
-      // 这里记得修改成实际的模块名和接口名
-      let result = await this.$api.模块名.getList().catch(err => {
+      let result = await this.$api.模块名.getList(this.queryParams).catch(err => {
         this.$message.error('获取列表失败');
         console.error(err);
       });
@@ -89,15 +79,19 @@ export default {
         this.listData = result;
       }
 
-      loading.close();
+      this.loading = false;
     }
   }
 };
 </script>
 
 <style lang="less" scoped>
-</style>
-`;
+</style>`;
 
-  return tableTpl;
+  return tpl;
+};
+
+
+export default {
+  getTpl
 };
