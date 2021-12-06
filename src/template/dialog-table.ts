@@ -6,7 +6,7 @@ const getTpl = async (params: { name: string }) => {
 
   const tpl=`
   <template>
-  <qf-dialog ref="dialog" :title="dialogTitle" width="626px" :visible.sync="visible">
+   <qf-dialog ref="dialog" :title="dialogTitle" width="626px" :visible.sync="visible">
     <div id="${params.name}">
       <el-table class="qf-table-detail" :data="listData.rows" style="width: 100%">
           ${createTableColumn(text)}

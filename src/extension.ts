@@ -3,6 +3,7 @@ import path = require('path');
 import fs = require('fs');
 import table from './template/table';
 import dialogForm from './template/dialog-form';
+import dialogTable from './template/dialog-table';
 import dialog from './template/dialog';
 import { createTableColumn, createFormItem, createQfLabel } from './template/utils';
 
@@ -18,7 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
 		createFile(name, await table.getTpl({ name: name }), uri);
 	});
 
-	// 生成表格列表
+	// 生成表格列
 	let createTableColDisposable = vscode.commands.registerCommand('qf-elf.createTableCol', async () => {
 		let text = await vscode.env.clipboard.readText();
 
@@ -35,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		};
 
-		createFile(name, await table.getTpl({ name: name }), uri);
+		createFile(name, await dialogTable.getTpl({ name: name }), uri);
 	});
 
 	// 生成表单项
@@ -47,7 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
 		pasteContent(cols);
 	});
 
-	// 生成弹框种带表格的文件
+	// 生成弹框带表单的文件
 	let createDialogFormDisposable = vscode.commands.registerCommand('qf-elf.createDialogForm', async (uri) => {
 		let name = await showInputBox();
 

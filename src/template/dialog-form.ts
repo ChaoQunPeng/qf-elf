@@ -26,9 +26,13 @@ const getTpl = async (params: { name: string }) => {
 
   const tpl = `
   <template>
-  <qf-dialog ref="dialog" :title="dialogTitle" width="626px" :visible.sync="visible">
+   <qf-dialog ref="dialog" :title="dialogTitle" width="626px" :visible.sync="visible">
     <div id="${params.name}" v-loading="loading">
-      ${createFormItem(text)}
+      <el-form class="qf-form" :model="form" ref="form" :rules="rules" label-width="45px" :hide-required-asterisk="true">
+        <el-row :gutter="24">
+          ${createFormItem(text)}
+        </el-row>
+      </el-form>
     </div>
 
     <template #footer>

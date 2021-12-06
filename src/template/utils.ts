@@ -15,7 +15,7 @@ export function createTableColumn(json: string) {
         tpl += `
 				<el-table-column prop="${key}" label="${json[key]}">
 					<template slot-scope="scope">
-						{{ scope.row.${key} }}
+						{{ scope.row.${key} | emptyDisplay }}
 					</template>
 				</el-table-column>
         `;
@@ -84,7 +84,7 @@ export function createQfLabel(json: string) {
 
       for (const key in json) {
         tpl += `
-        <qf-label label="${json[key]}">{{pageData.${key}}}</qf-label>
+        <qf-label label="${json[key]}">{{pageData.${key}  | emptyDisplay}}</qf-label>
         `;
       }
 

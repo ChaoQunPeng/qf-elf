@@ -21,7 +21,8 @@ const path = __webpack_require__(2);
 const fs = __webpack_require__(3);
 const table_1 = __webpack_require__(4);
 const dialog_form_1 = __webpack_require__(6);
-const dialog_1 = __webpack_require__(7);
+const dialog_table_1 = __webpack_require__(7);
+const dialog_1 = __webpack_require__(8);
 const utils_1 = __webpack_require__(5);
 function activate(context) {
     // 创建表格列表文件
@@ -33,7 +34,7 @@ function activate(context) {
         ;
         createFile(name, yield table_1.default.getTpl({ name: name }), uri);
     }));
-    // 生成表格列表
+    // 生成表格列
     let createTableColDisposable = vscode.commands.registerCommand('qf-elf.createTableCol', () => __awaiter(this, void 0, void 0, function* () {
         let text = yield vscode.env.clipboard.readText();
         let cols = (0, utils_1.createTableColumn)(text);
@@ -46,7 +47,7 @@ function activate(context) {
             return;
         }
         ;
-        createFile(name, yield table_1.default.getTpl({ name: name }), uri);
+        createFile(name, yield dialog_table_1.default.getTpl({ name: name }), uri);
     }));
     // 生成表单项
     let createFormItemDisposable = vscode.commands.registerCommand('qf-elf.createFormItem', (uri) => __awaiter(this, void 0, void 0, function* () {
@@ -54,7 +55,7 @@ function activate(context) {
         let cols = (0, utils_1.createFormItem)(text);
         pasteContent(cols);
     }));
-    // 生成弹框种带表格的文件
+    // 生成弹框带表单的文件
     let createDialogFormDisposable = vscode.commands.registerCommand('qf-elf.createDialogForm', (uri) => __awaiter(this, void 0, void 0, function* () {
         let name = yield showInputBox();
         if (!name) {
@@ -312,7 +313,7 @@ function createTableColumn(json) {
                 tpl += `
 				<el-table-column prop="${key}" label="${json[key]}">
 					<template slot-scope="scope">
-						{{ scope.row.${key} }}
+						{{ scope.row.${key} | emptyDisplay }}
 					</template>
 				</el-table-column>
         `;
@@ -371,7 +372,7 @@ function createQfLabel(json) {
             let tpl = ``;
             for (const key in json) {
                 tpl += `
-        <qf-label label="${json[key]}">{{pageData.${key}}}</qf-label>
+        <qf-label label="${json[key]}">{{pageData.${key}  | emptyDisplay}}</qf-label>
         `;
             }
             return tpl;
@@ -427,9 +428,13 @@ const getTpl = (params) => __awaiter(void 0, void 0, void 0, function* () {
     let text = yield vscode.env.clipboard.readText();
     const tpl = `
   <template>
-  <qf-dialog ref="dialog" :title="dialogTitle" width="626px" :visible.sync="visible">
+   <qf-dialog ref="dialog" :title="dialogTitle" width="626px" :visible.sync="visible">
     <div id="${params.name}" v-loading="loading">
-      ${(0, utils_1.createFormItem)(text)}
+      <el-form class="qf-form" :model="form" ref="form" :rules="rules" label-width="45px" :hide-required-asterisk="true">
+        <el-row :gutter="24">
+          ${(0, utils_1.createFormItem)(text)}
+        </el-row>
+      </el-form>
     </div>
 
     <template #footer>
@@ -533,6 +538,119 @@ exports["default"] = {
 
 /***/ }),
 /* 7 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const vscode = __webpack_require__(1);
+const utils_1 = __webpack_require__(5);
+const getTpl = (params) => __awaiter(void 0, void 0, void 0, function* () {
+    let text = yield vscode.env.clipboard.readText();
+    const tpl = `
+  <template>
+   <qf-dialog ref="dialog" :title="dialogTitle" width="626px" :visible.sync="visible">
+    <div id="${params.name}">
+      <el-table class="qf-table-detail" :data="listData.rows" style="width: 100%">
+          ${(0, utils_1.createTableColumn)(text)}
+      </el-table>
+    </div>
+
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button :loading="loading" class="qf-plain-btn" @click="cancel">取消</el-button>
+        <el-button :loading="loading" type="primary" @click="ok">保存</el-button>
+      </div>
+    </template>
+  </qf-dialog>
+</template>
+
+<script>
+export default {
+  name: '${params.name}',
+
+  props: {
+    visible: {
+      type: Boolean,
+      default: false
+    }
+  },
+
+  data() {
+    return {
+      queryParams: {
+        search: '',
+        page: 1,
+        page_size: 10
+      },
+      listData: {
+        rows: [],
+        total: 0
+      },
+      loading: false
+    };
+  },
+
+  computed: {
+    dialogTitle() {
+      return this.$dialogRef.record?.editId ? '编辑' : '添加';
+    }
+  },
+
+  created() {
+    if (this.$dialogRef.record?.editId) {
+    }
+
+    this.getList();
+  },
+
+  methods: {
+    /**
+     * 获取列表
+     */
+    async getList() {
+      this.loading = true;
+
+      let result = await this.$api.模块名.getList(this.queryParams).catch(err => {
+        this.$message.error('获取列表失败');
+        console.error(err);
+      });
+
+      if (result) {
+        this.listData = result;
+      }
+
+      this.loading = false;
+    },
+    cancel() {
+      this.$refs.dialog.close();
+    },
+    ok() { }
+  }
+};
+</script>
+
+<style lang="less" scoped>
+</style>
+  
+  `;
+    return tpl;
+});
+exports["default"] = {
+    getTpl
+};
+
+
+/***/ }),
+/* 8 */
 /***/ (function(__unused_webpack_module, exports) {
 
 
