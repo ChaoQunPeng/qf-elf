@@ -79,8 +79,8 @@ export default {
     /**
      * 编辑
      */
-    async edit() {
-      let result = await this.$api.模块名.方法名(this.form).catch(err => {
+    async edit(params) {
+      let result = await this.$api.模块名.方法名(params).catch(err => {
         this.$message.success('${`提交失败`}');
         console.error(err);
       });
@@ -94,8 +94,8 @@ export default {
     /**
      * 新增
      */
-    async add() {
-      let result = await this.$api.模块名.方法名(this.form).catch(err => {
+    async add(params) {
+      let result = await this.$api.模块名.方法名(params).catch(err => {
         this.$message.success('${`提交失败`}');
         console.error(err);
       });
@@ -110,12 +110,14 @@ export default {
       this.$refs.dialog.close();
     },
     ok() {
+      let params = this.form;
+
       this.$refs.form.validate(valid => {
         if (valid) {
           if (this.$dialogRef.record.editId) {
-            this.edit();
+            this.edit(params);
           } else {
-            this.add();
+            this.add(params);
           }
         }
       });
