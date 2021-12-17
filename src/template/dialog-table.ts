@@ -74,7 +74,7 @@ export default {
       });
 
       if (result) {
-        this.listData = result;
+        this.listData = result.data;
       }
 
       this.loading = false;
