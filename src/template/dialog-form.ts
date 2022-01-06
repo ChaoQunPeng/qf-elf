@@ -80,6 +80,7 @@ export default {
      * 编辑
      */
     async edit(params) {
+      this.loading=true;
       let result = await this.$api.模块名.方法名(params).catch(err => {
         this.$message.success('${`提交失败`}');
         console.error(err);
@@ -90,11 +91,14 @@ export default {
         this.$dialogRef.onOk();
         this.cancel();
       }
+
+      this.loading=false;
     },
     /**
      * 新增
      */
     async add(params) {
+      this.loading=true;
       let result = await this.$api.模块名.方法名(params).catch(err => {
         this.$message.success('${`提交失败`}');
         console.error(err);
@@ -105,6 +109,8 @@ export default {
         this.$dialogRef.onOk();
         this.cancel();
       }
+
+      this.loading=false;
     },
     cancel() {
       this.$refs.dialog.close();

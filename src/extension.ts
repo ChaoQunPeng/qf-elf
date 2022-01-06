@@ -79,6 +79,17 @@ export function activate(context: vscode.ExtensionContext) {
 		pasteContent(cols);
 	});
 
+	// 生成纯弹框
+	let createDrawerDisposable = vscode.commands.registerCommand('qf-elf.createDrawer', async (uri) => {
+		let name = await showInputBox();
+
+		if (!name) {
+			return;
+		};
+
+		createFile(name, await dialog.getTpl({ name: name }), uri);
+	});
+
 	const disposes: any[] = [
 		createTableListDisposable,
 		createTableColDisposable,
@@ -86,7 +97,8 @@ export function activate(context: vscode.ExtensionContext) {
 		createFormItemDisposable,
 		createDialogFormDisposable,
 		createDialogDisposable,
-		createQflabelDisposable
+		createQflabelDisposable,
+		createDrawerDisposable
 	];
 
 	disposes.forEach(d => {

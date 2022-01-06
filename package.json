@@ -45,6 +45,10 @@
 			{
 				"command": "qf-elf.createQflabel",
 				"title": "QF/生成qf-label代码"
+			},
+			{
+				"command": "qf-elf.createDrawer",
+				"title": "QF/生成drawer文件"
 			}
 		],
 		"menus": {
@@ -85,6 +89,12 @@
 					"when": "explorerViewletVisible",
 					"command": "qf-elf.createDialog",
 					"group": "1_modification@3"
+				}
+				,
+				{
+					"when": "explorerViewletVisible",
+					"command": "qf-elf.createDrawer",
+					"group": "1_modification@4"
 				}
 			]
 		}
