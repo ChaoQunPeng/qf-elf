@@ -5,6 +5,7 @@ import table from './template/table';
 import dialogForm from './template/dialog-form';
 import dialogTable from './template/dialog-table';
 import dialog from './template/dialog';
+import base from './template/base';
 import { createTableColumn, createFormItem, createQfLabel } from './template/utils';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -90,6 +91,17 @@ export function activate(context: vscode.ExtensionContext) {
 		createFile(name, await dialog.getTpl({ name: name }), uri);
 	});
 
+	// 生成基础模板
+	let createBaseTpl = vscode.commands.registerCommand('qf-elf.createBaseTpl', async (uri) => {
+		let name = await showInputBox();
+
+		if (!name) {
+			return;
+		};
+
+		createFile(name, await base.getTpl({ name: name }), uri);
+	});
+
 	const disposes: any[] = [
 		createTableListDisposable,
 		createTableColDisposable,
@@ -98,7 +110,8 @@ export function activate(context: vscode.ExtensionContext) {
 		createDialogFormDisposable,
 		createDialogDisposable,
 		createQflabelDisposable,
-		createDrawerDisposable
+		createDrawerDisposable,
+		createBaseTpl
 	];
 
 	disposes.forEach(d => {

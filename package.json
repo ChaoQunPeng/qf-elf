@@ -49,6 +49,10 @@
 			{
 				"command": "qf-elf.createDrawer",
 				"title": "QF/生成drawer文件"
+			},
+			{
+				"command": "qf-elf.createBaseTpl",
+				"title": "QF/生成vue基础模板"
 			}
 		],
 		"menus": {
@@ -72,29 +76,34 @@
 			"explorer/context": [
 				{
 					"when": "explorerViewletVisible",
-					"command": "qf-elf.createTableList",
+					"command": "qf-elf.createBaseTpl",
 					"group": "1_modification@0"
 				},
 				{
 					"when": "explorerViewletVisible",
-					"command": "qf-elf.createDialogTable",
+					"command": "qf-elf.createTableList",
 					"group": "1_modification@1"
 				},
 				{
 					"when": "explorerViewletVisible",
-					"command": "qf-elf.createDialogForm",
+					"command": "qf-elf.createDialogTable",
 					"group": "1_modification@2"
 				},
 				{
 					"when": "explorerViewletVisible",
-					"command": "qf-elf.createDialog",
+					"command": "qf-elf.createDialogForm",
 					"group": "1_modification@3"
+				},
+				{
+					"when": "explorerViewletVisible",
+					"command": "qf-elf.createDialog",
+					"group": "1_modification@4"
 				}
 				,
 				{
 					"when": "explorerViewletVisible",
 					"command": "qf-elf.createDrawer",
-					"group": "1_modification@4"
+					"group": "1_modification@5"
 				}
 			]
 		}
