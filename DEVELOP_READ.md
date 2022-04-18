@@ -1,0 +1,1 @@
+vsce package 打包出文件。然后打开 https://marketplace.visualstudio.com/ 进行上传
