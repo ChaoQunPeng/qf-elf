@@ -10,7 +10,7 @@ const getTpl = async (params: { name: string }) => {
       ${createTableColumn(text)}
     </el-table>
 
-    <div class="text-right mt6" v-if="listData.total != 0">
+    <div class="text-right mt6" v-if="listData.total > queryParams.page_size">
       <el-pagination
         background
         layout="total,prev, pager, next"
@@ -76,7 +76,7 @@ export default {
       });
 
       if (result) {
-        this.listData = result;
+        this.listData = result.data;
       }
 
       this.loading = false;

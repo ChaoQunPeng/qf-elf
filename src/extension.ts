@@ -5,6 +5,7 @@ import table from './template/table';
 import dialogForm from './template/dialog-form';
 import dialogTable from './template/dialog-table';
 import dialog from './template/dialog';
+import drawer from './template/drawer';
 import base from './template/base';
 import { createTableColumn, createFormItem, createQfLabel } from './template/utils';
 
@@ -80,7 +81,7 @@ export function activate(context: vscode.ExtensionContext) {
 		pasteContent(cols);
 	});
 
-	// 生成纯弹框
+	// 生成抽屉
 	let createDrawerDisposable = vscode.commands.registerCommand('qf-elf.createDrawer', async (uri) => {
 		let name = await showInputBox();
 
@@ -88,7 +89,7 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		};
 
-		createFile(name, await dialog.getTpl({ name: name }), uri);
+		createFile(name, await drawer.getTpl({ name: name }), uri);
 	});
 
 	// 生成基础模板
