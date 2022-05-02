@@ -2,7 +2,7 @@
 	"name": "qf-elf",
 	"displayName": "qf-elf",
 	"description": "",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"publisher": "pcq",
 	"icon": "icon.png",
 	"engines": {
